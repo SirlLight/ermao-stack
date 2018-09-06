@@ -12,17 +12,17 @@ export default class Home extends Component {
             {
                 id: 0,
                 img: testImg,
-                title: "woshibiaoti"
+                title: "别人生气我不气"
             },
             {
                 id: 0,
                 img: testImg,
-                title: "woshibiaoti"
+                title: "别人生气我不气"
             },
             {
                 id: 0,
                 img: testImg,
-                title: "woshibiaoti"
+                title: "别人生气我不气"
             }
         ];
     }
@@ -48,10 +48,12 @@ export default class Home extends Component {
                             Object.keys(this.article).map(index => {
                                 let item = this.article[index];
                                 return (
-                                    <li key={index} className="content-article-item">
-                                        <img className="content-article-img" src={item.img} />
-                                        <Link to="/" className="content-article-title">{item.title}</Link>
-                                    </li>
+                                    <Link to="/" className="content-article-item">
+                                        <li key={index}>
+                                            <img className="content-article-img" src={item.img} />
+                                            <p className="content-article-title">{item.title}</p>
+                                        </li>
+                                    </Link>
                                 );
                             })
                         }
