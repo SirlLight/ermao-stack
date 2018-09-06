@@ -12,9 +12,7 @@ export default class HomeHeader extends Component {
     }
 
     componentWillMount () {
-        if (!cookie.load("username")) {
-            this.props.history.replace("/login");
-        } else {
+        if (cookie.load("username")) {
             this.setState({
                 isLogin: true,
                 username: cookie.load("username")

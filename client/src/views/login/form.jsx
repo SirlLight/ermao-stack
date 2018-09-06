@@ -81,6 +81,8 @@ export default class LoginForm extends Component {
             if (res && res.code === 0) {
                 cookie.save("username", res.data, { path: "/" });
                 _this.props.setLogin(true);
+            } else {
+                message.error(res.msg);
             }
         });
     };

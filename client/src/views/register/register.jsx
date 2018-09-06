@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import SmileLoading from "../../common/components/loading/smile-loading";
+import PageLoading from "../../common/components/loading/page-loading";
 import HomeHeader from "../../layout/home-nav";
 import RegisterForm from "./form";
 import "./register.less";
@@ -10,7 +10,7 @@ export default class Register extends Component {
         super(props);
 
         this.state = {
-            regSuccess: true
+            regSuccess: false
         };
     }
 
@@ -31,7 +31,7 @@ export default class Register extends Component {
         return (
             <div id="ermao-register-wrap">
                 {
-                    this.state.regSuccess ? <SmileLoading text={"注册成功，快去登录叭~"} /> : null
+                    this.state.regSuccess ? <PageLoading text={"注册成功，快去登录叭~"} /> : null
                 }
                 <HomeHeader history={this.props.history}/>
                 <div className="register-banner-wrap">
