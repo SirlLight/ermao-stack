@@ -98,9 +98,9 @@ const config = {
     serve: {
         content: [distDir],
         hot: true,
-        port: "2333",
+        port: "3030",
         add: (app) => {            
-            app.use(convert(proxy("/api", { target: "http://localhost:3030" })));
+            app.use(convert(proxy("/api", { target: "http://localhost:2333" })));
             app.use(convert(history({
                 disableDotRule: true,
                 verbose: true,
