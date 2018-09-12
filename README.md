@@ -51,43 +51,32 @@ npm run dev
 
 <h2 align="center">框架搭建过程</h2>
 
-技术栈：[react](https://reactjs.org/docs/getting-started.html)、[koa](https://chenshenhai.github.io/koa2-note/)、[webpack](https://webpack.docschina.org/concepts/)
+技术栈：[react](https://reactjs.org/docs/getting-started.html)、[koa](https://chenshenhai.github.io/koa2-note/)、[webpack](https://webpack.docschina.org/concepts/)、[babel](https://www.babeljs.cn/docs/usage/babelrc/)
 
 挑一两个相关涉及package：[superagent](https://cnodejs.org/topic/5378720ed6e2d16149fa16bd)、[sequelize](https://demopark.github.io/sequelize-docs-Zh-CN/)
 
-目录结构如下：
+开发还是区分的前后端，client里面是react、webpack，server里面是koa。目录结构如下：
 
 <img src="./doc/tree.png">
 
+### 关于webpack和babel
+
+webpack和babel都是用的目前最新版，这个时候webpack版本是`4.16.4`......想要逼逼叨捋一下的欲望蠢蠢欲动，唔，那就简要逼逼叨一下webpack吧~
+
+我觉得官网说的很棒（手动滑稽）
 ```
-├─client    前端开发文件夹
-│  ├─dist   打包生成的资源文件，包含js,css,img
-│  │  ├─css
-│  │  ├─img
-│  │  └─js
-│  ├─src    开发目录
-│  │  ├─api     前端请求接口存放地址
-│  │  ├─common      公用模块儿
-│  │  │  ├─components   公用组件
-│  │  │  │  └─loading   loading组件
-│  │  │  ├─http     封装请求
-│  │  │  ├─img      公用图片
-│  │  │  ├─style    公用样式
-│  │  │  └─tools    一些小公举
-│  │  ├─layout     布局
-│  │  ├─routes     前端路由
-│  │  └─views    视图文件
-│  │      ├─home
-│  │      ├─login
-│  │      └─register
-│  └─webpack    打包配置文件
-├─doc   写md存图用的
-├─mysql     sql文件
-└─server    服务器端开发
-    ├─config    服务器端的配置文件（包含数据库配置文件）
-    ├─controller    控制器
-    ├─models    后端数据库控制代码（连接数据库，创建数据模型）
-    ├─routes    后端路由
-    ├─util     后端的一些小公举 
-    └─views     后端渲染模板
+本质上，webpack 是一个现代 JavaScript 应用程序的静态模块打包器(static module bundler)。在 webpack 处理应用程序时，它会在内部创建一个依赖图(dependency graph)，用于映射到项目需要的每个模块，然后将所有这些依赖生成到一个或多个bundle。
 ```
+我的理解就是按照依赖打包资源，完成资源的合并、删除、babel转换编译等等操作。
+
+babel呢，是一个js编译器，提供一个es6+的环境，能够解析es6+，然后转换生成可以在浏览器中运行的代码。它的所有转译都是使用本地配置文件`.babelrc`或者`package.json`，具体配置可以参考[Options](https://www.babeljs.cn/docs/core-packages/#options)和[Plugins](https://www.babeljs.cn/docs/plugins/)
+
+#### 配置webpack
+
+会准备两份配置文件，一份是开发时用的，一份是打包的时候用的。区别就是开发时需要热替换，不用进行压缩资源，转发请求至node服务器，支持[source map](https://blog.fundebug.com/2017/03/13/sourcemap-tutorial/)等等，总之开发时需要的配置是方便开发调试。而打包部署时所需要的配置主要针对的是压缩打包资源的大小。
+
+##### [入口（Input）](https://webpack.docschina.org/configuration/entry-context/)
+##### [输出（output）](https://webpack.docschina.org/configuration/output/)
+##### [loader](https://webpack.docschina.org/concepts/loaders/)
+##### [plugins](https://webpack.docschina.org/concepts/plugins/)
+##### [webpack-serve](https://webpack.docschina.org/configuration/dev-server/)
