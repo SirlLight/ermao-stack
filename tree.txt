@@ -1,0 +1,30 @@
+├─client    前端开发文件夹
+│  ├─dist   打包生成的资源文件，包含js,css,img
+│  │  ├─css
+│  │  ├─img
+│  │  └─js
+│  ├─src    开发目录
+│  │  ├─api     前端请求接口存放地址
+│  │  ├─common      公用模块儿
+│  │  │  ├─components   公用组件
+│  │  │  │  └─loading   loading组件
+│  │  │  ├─http     封装请求
+│  │  │  ├─img      公用图片
+│  │  │  ├─style    公用样式
+│  │  │  └─tools    一些小公举
+│  │  ├─layout     布局
+│  │  ├─routes     前端路由
+│  │  └─views    视图文件
+│  │      ├─home
+│  │      ├─login
+│  │      └─register
+│  └─webpack    打包配置文件
+├─doc   写md存图用的
+├─mysql     sql文件
+└─server    服务器端开发
+    ├─config    服务器端的配置文件（包含数据库配置文件）
+    ├─controller    控制器
+    ├─models    后端数据库控制代码（连接数据库，创建数据模型）
+    ├─routes    后端路由
+    ├─util     后端的一些小公举 
+    └─views     后端渲染模板

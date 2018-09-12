@@ -49,30 +49,45 @@ npm run dev
 默认webpack服务器端口号为3030，node服务器端的端口号为2333
 
 
-<h2 align="center">框架优势</h2>
+<h2 align="center">框架搭建过程</h2>
 
-* 路由同步(前后端共用一套路由)
-* 模板同步(前后端共用一套模板)
-* 数据同步(前后端公用一套数据状态机)
+技术栈：[react](https://reactjs.org/docs/getting-started.html)、[koa](https://chenshenhai.github.io/koa2-note/)、[webpack](https://webpack.docschina.org/concepts/)
 
-同构对比之前非同构加载对比, 可以明显看到白屏时间更少, 页面总计加载速度更快
+挑一两个相关涉及package：[superagent](https://cnodejs.org/topic/5378720ed6e2d16149fa16bd)、[sequelize](https://demopark.github.io/sequelize-docs-Zh-CN/)
 
-非同构 VS 同构
+目录结构如下：
 
-<img width="390" src="doc/img/vs.png">
+<img src="./doc/tree.png">
 
-前端开发中也支持react,react-router,样式及Redux的动态更新
-
-<img width="450" src="doc/img/preview.gif">
-
-<h2 align="center">开发BUG日记</h2>
-当开发中遇到的问题,我会列在下面,以方便自己查询和其他人进行相同问题的修改和修复
-
-[问题列表](https://github.com/aemoe/fairy/issues)
-
-<h2 align="center">如何搭建这样一个框架</h2>
-
-[Link](https://aemoe.github.io/2017/05/18/How%20to%20build/)
-
-<h2 align="center">协议</h2>
-MIT
+```
+├─client    前端开发文件夹
+│  ├─dist   打包生成的资源文件，包含js,css,img
+│  │  ├─css
+│  │  ├─img
+│  │  └─js
+│  ├─src    开发目录
+│  │  ├─api     前端请求接口存放地址
+│  │  ├─common      公用模块儿
+│  │  │  ├─components   公用组件
+│  │  │  │  └─loading   loading组件
+│  │  │  ├─http     封装请求
+│  │  │  ├─img      公用图片
+│  │  │  ├─style    公用样式
+│  │  │  └─tools    一些小公举
+│  │  ├─layout     布局
+│  │  ├─routes     前端路由
+│  │  └─views    视图文件
+│  │      ├─home
+│  │      ├─login
+│  │      └─register
+│  └─webpack    打包配置文件
+├─doc   写md存图用的
+├─mysql     sql文件
+└─server    服务器端开发
+    ├─config    服务器端的配置文件（包含数据库配置文件）
+    ├─controller    控制器
+    ├─models    后端数据库控制代码（连接数据库，创建数据模型）
+    ├─routes    后端路由
+    ├─util     后端的一些小公举 
+    └─views     后端渲染模板
+```
