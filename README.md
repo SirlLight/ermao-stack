@@ -73,10 +73,96 @@ babel呢，是一个js编译器，提供一个es6+的环境，能够解析es6+�
 
 #### 配置webpack
 
-会准备两份配置文件，一份是开发时用的，一份是打包的时候用的。区别就是开发时需要热替换，不用进行压缩资源，转发请求至node服务器，支持[source map](https://blog.fundebug.com/2017/03/13/sourcemap-tutorial/)等等，总之开发时需要的配置是方便开发调试。而打包部署时所需要的配置主要针对的是压缩打包资源的大小。
+一般会准备两份配置文件，一份是开发时用的，一份是打包的时候用的。区别就是开发时需要热替换，不用进行压缩资源，转发请求至node服务器，支持[source map](https://blog.fundebug.com/2017/03/13/sourcemap-tutorial/)等等，总之开发时需要的配置是方便开发调试。而打包部署时所需要的配置主要针对的是压缩打包资源的大小。
 
 ##### [入口（Input）](https://webpack.docschina.org/configuration/entry-context/)
+```
+entry: {
+	bundle: "./client/src",
+	vendor: [
+		"react",
+		"react-dom",
+		"react-router",
+		"react-router-dom",
+		"superagent",
+		"@ckeditor/ckeditor5-build-classic"
+	]
+}
+```
+入口配置分离了应用程序（bundle）和第三方库（vendor）入口。这样的分离配置而不是简写的`entry: "./index.js"`主要是允许使用`CommonsChunkPlugin`从bundle中提取vendor引用到vendor的bundle中，并且把引用vendor的部分替换成`__webpack_require__()`调用，就像这个样子：
+
+<img src="./doc/vendor-require.png">
+
+一般第三方库不会频繁产生变动，所以需要可以在浏览器缓存这种稳定的资源，那么分离入口就达到了把稳定资源单独提取出来的作用，提取出来之后就要缓存在客户端，而且当某部分模块产生变更时，不会使得所有模块的缓存失效。webpack4移除了`CommonsChunkPlugin`，取而代之的是两个新的配置项[optimization.splitChunks和optimization.runtimeChunk](https://segmentfault.com/a/1190000013476837)，用法如下：
+```
+optimization: {
+	// 将模块分离到单独的文件中
+	splitChunks: {
+		// 将第三方库缓存在客户端
+		cacheGroups: {
+			vendor: {
+				chunks: "initial",    // "infinity" 等价于入口数量，即所有入口都引用的模块才会提取出来
+				name: "vendor",
+				enforce: true
+			},
+		}
+	},
+	// 优化持久化缓存。将模块信息单独打包出来，使得变更某个模块时缓存不会失效
+	runtimeChunk: true
+}
+```
+optimization.runtimeChunk 的理解有点不太好懂，[感觉这个解释得比较直白一点](https://segmentfault.com/q/1010000014954264)
+
+<img src="./doc/runtime.png">
+
 ##### [输出（output）](https://webpack.docschina.org/configuration/output/)
+```
+output: {
+	// 输出目录的绝对路径 distDir=path.resolve(__dirname, "../dist")
+	path: distDir,
+	filename: "js/[name].[chunkhash:8].js",
+	chunkFilename: "js/[name].chunk.[chunkhash:8].js",
+	publicPath: "/"		// 使用CDN
+}
+```
 ##### [loader](https://webpack.docschina.org/concepts/loaders/)
+loader就相当于gulp中的task，对模块的源码进行转换，比如：
+```
+{
+	test: /\.jsx?$/,
+	include: [
+		path.resolve(__dirname, "../src")
+	],
+	use: [
+		"babel-loader"
+	]
+}
+```
+意思就是对每个`.jsx`使用`babel-loader`
 ##### [plugins](https://webpack.docschina.org/concepts/plugins/)
+pulgins就是插件啊，一般loader没法干的事，都会有这么一个插件来补充，总的来讲，锦上添花，事半功倍。
+
+<img src="./doc/lodash.png">
+
 ##### [webpack-serve](https://webpack.docschina.org/configuration/dev-server/)
+这个服务器等于一个微型的express或者koa框架, 使用它可以使用nodejs完成一个简单的本地服务器, 并支持热替换功能, 主要是检测webpack打包过程和让程序支持热替换
+```
+serve: {
+	content: [path.resolve(__dirname, "../dist")],
+	hot: true,
+	port: "3030",
+	add: (app) => {            
+		app.use(convert(proxy("/api", { target: "http://localhost:2333" })));
+		app.use(convert(history({
+			disableDotRule: true,
+			verbose: true,
+			htmlAcceptHeaders: ["text/html", "application/xhtml+xml"]
+		})));
+	},
+}
+```
+唔，具体的突然懒得说了，ant写了篇文章简单介绍了一下，可以看一下[webpack-serve 的使用](https://segmentfault.com/a/1190000015559392)
+
+
+webpack的水是真的深，在知识的海洋里浮浮沉沉，只是感觉，好像学不完了嘤嘤嘤T_T
+

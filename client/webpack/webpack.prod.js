@@ -125,16 +125,18 @@ module.exports = {
         new LodashModuleReplacementPlugin
     ],
     optimization: {
+        // 将模块分离到单独的文件中
         splitChunks: {
-          cacheGroups: {
-            vendor: {
-              chunks: "initial",
-              name: "vendor",
-              test: "vendor",
-              enforce: true
-            },
-          }
+            // 将第三方库缓存在客户端
+            cacheGroups: {
+                vendor: {
+                    chunks: "initial",    // "infinity" 等价于入口数量，即所有入口都引用的模块才会提取出来
+                    name: "vendor",
+                    enforce: true
+                },
+            }
         },
+        // 优化持久化缓存。将模块信息单独打包出来，使得变更某个模块时缓存不会失效
         runtimeChunk: true
     }
 }
