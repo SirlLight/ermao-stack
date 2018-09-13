@@ -19,6 +19,6 @@ export default function(sequelize, DataTypes) {
             allowNull: false
         }
     });
-    User.sync();
+    User.sync();    // 数据库同步，同步所有尚未在数据库中的模型
     return User;
 }
