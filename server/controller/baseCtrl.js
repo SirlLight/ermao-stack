@@ -14,11 +14,6 @@ class baseCtrl {
                 password: data.password,
                 email: data.email
             };
-            // ctx.body = {
-            //     code: 0,
-            //     data: [],
-            //     msg: "注册成功"
-            // };
 
             if (!insertData.username || !insertData.password || !insertData.email) {
                 ctx.body = {

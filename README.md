@@ -268,3 +268,21 @@ function dispatch (i) {
 koa就大概说到这里吧，说的有点长= =但是koa的源码真的很少，还有注释，嗨森，可阅读性比较好~
 
 ### 关于数据库
+
+我也是无意间发现[`sequelize`](https://demopark.github.io/sequelize-docs-Zh-CN/)的，Sequelize 是一个基于 promise 的 Node.js ORM, 目前支持 Postgres, MySQL, SQLite 和 Microsoft SQL Server，它具有强大的事务支持，关联关系，读取和复制等功能。就是把数据库的sql语句封装好，针对不同的功能对外提供相应的api。
+
+大概用法就是这样：
+
+首先是建立数据库连接，设置连接池
+
+<img src="./doc/db-connect.png">
+
+然后是使用[数据模型](https://demopark.github.io/sequelize-docs-Zh-CN/models-definition.html)，映射数据库中的表
+
+<img src="./doc/db-model.png">
+
+最后就可以肆意使用啦
+
+<img src="./doc/db-use.png">
+
+亲测真的很好用，也很好理解
