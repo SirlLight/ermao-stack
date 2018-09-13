@@ -59,7 +59,7 @@ npm run dev
 
 <img src="./doc/tree.png">
 
-### 关于webpack和babel
+<h3 align="center">关于webpack和babel</h3>
 
 webpack和babel都是用的目前最新版，这个时候webpack版本是`4.16.4`......想要逼逼叨捋一下的欲望蠢蠢欲动，唔，那就简要逼逼叨一下webpack吧~
 
@@ -71,11 +71,11 @@ webpack和babel都是用的目前最新版，这个时候webpack版本是`4.16.4
 
 babel呢，是一个js编译器，提供一个es6+的环境，能够解析es6+，然后转换生成可以在浏览器中运行的代码。它的所有转译都是使用本地配置文件`.babelrc`或者`package.json`，具体配置可以参考[Options](https://www.babeljs.cn/docs/core-packages/#options)和[Plugins](https://www.babeljs.cn/docs/plugins/)
 
-#### 配置webpack
+### 配置webpack
 
 一般会准备两份配置文件，一份是开发时用的，一份是打包的时候用的。区别就是开发时需要热替换，不用进行压缩资源，转发请求至node服务器，支持[source map](https://blog.fundebug.com/2017/03/13/sourcemap-tutorial/)等等，总之开发时需要的配置是方便开发调试。而打包部署时所需要的配置主要针对的是压缩打包资源的大小。
 
-##### [入口（Input）](https://webpack.docschina.org/configuration/entry-context/)
+#### [入口（Input）](https://webpack.docschina.org/configuration/entry-context/)
 ```
 entry: {
 	bundle: "./client/src",
@@ -115,7 +115,7 @@ optimization.runtimeChunk 的理解有点不太好懂，[感觉这个解释得�
 
 <img src="./doc/runtime.png">
 
-##### [输出（output）](https://webpack.docschina.org/configuration/output/)
+#### [输出（output）](https://webpack.docschina.org/configuration/output/)
 ```
 output: {
 	// 输出目录的绝对路径 distDir=path.resolve(__dirname, "../dist")
@@ -125,7 +125,7 @@ output: {
 	publicPath: "/"		// 使用CDN
 }
 ```
-##### [loader](https://webpack.docschina.org/concepts/loaders/)
+#### [loader](https://webpack.docschina.org/concepts/loaders/)
 loader就相当于gulp中的task，对模块的源码进行转换，比如：
 ```
 {
@@ -139,12 +139,12 @@ loader就相当于gulp中的task，对模块的源码进行转换，比如：
 }
 ```
 意思就是对每个`.jsx`使用`babel-loader`
-##### [plugins](https://webpack.docschina.org/concepts/plugins/)
+#### [plugins](https://webpack.docschina.org/concepts/plugins/)
 pulgins就是插件啊，一般loader没法干的事，都会有这么一个插件来补充，总的来讲，锦上添花，事半功倍。
 
 <img src="./doc/lodash.png">
 
-##### [webpack-serve](https://webpack.docschina.org/configuration/dev-server/)
+#### [webpack-serve](https://webpack.docschina.org/configuration/dev-server/)
 这个服务器等于一个微型的express或者koa框架, 使用它可以使用nodejs完成一个简单的本地服务器, 并支持热替换功能, 主要是检测webpack打包过程和让程序支持热替换
 ```
 serve: {
@@ -166,3 +166,105 @@ serve: {
 
 webpack的水是真的深，在知识的海洋里浮浮沉沉，只是感觉，好像学不完了嘤嘤嘤T_T
 
+<h3 align="center">关于服务器端</h3>
+
+服务器端的主要工作就是：请求代理（相当于一个servies）、路由、模板渲染。开发框架呢，我选了koa，原因就是，以前用过express，这次换个新的试试看~当然，用了之后还是有点小想法的：
+
++ koa比express更轻巧。koa是模块化的，不像express是一个很完善的框架，koa就可以个性化定制，想用啥就用啥，唔，因为这是个简单的小项目，想着用个相比之下更轻巧一点的koa比较合适
++ koa用新的[async/await](https://segmentfault.com/a/1190000007535316)关键字代替express的回调。koa基于es6特性开发，感觉用起来很舒服，看起来像同步代码，读代码更容易
+
+其他的我还没什么体验，这次项目小，也就这个样子了。具体对比可以参考[koa vs express](https://raygun.com/blog/koa-vs-express-2018/)
+
+### 关于koa
+
+说到这儿，脑子里立马想到的是next()...主要是之前看源码看得脑阔痛，反应就比较强烈一点= =唔，顺便捋一下，记一笔~首先，看两个效果：
+
+<img src="./doc/next1.png">
+<img src="./doc/next2.png">
+
+这样看就大概知道next是啥意思了，它的作用就相当于是把执行控制权转交给下一个中间件，当执行到最后一层中间件触底之后，就会返回执行权，逆行上去，如果当前中间件没有终结请求而且没有调用next，那么请求就会被挂起，后面的中间件就得不到执行的机会。这种形式叫洋葱圈模型，如下图：
+
+<img src="./doc/onion.png">
+
+这段代码简要理解一下就是这样的：
+```
+one = (ctx, next) => {
+    console.log("+++ one");
+    next(); -----------------------> two = (ctx, next) => {
+                                        console.log("+++ two");
+                                        next(); -----------------------> three = (ctx, next) => {
+                                                                            console.log("+++ three"); ---->|
+                                                                            console.log("--- three"); <----|
+                                                                        };
+                                        console.log("--- two");
+                                    };
+    console.log("--- one");
+};
+```
+[看一下源码理解](https://juejin.im/entry/59e747f0f265da431c6f668e)得更深一点，koa源码主要有四个文件：
+```
+├─benchmarks
+├─docs
+│  └─api
+│          
+├─lib
+│      application.js   // koa的核心了
+│      context.js   // 唔没啥主要功能，里面是一些小工具型的函数
+│      request.js   // 主要是用于处理请求头结构体的，获取和修改，一堆set和get
+│      response.js  // 处理响应头的，也是一堆set和get
+│      
+└─test
+    │  
+    ├─application
+    │      
+    ├─context
+    │      
+    ├─helpers
+    │      
+    ├─request
+    │      
+    └─response 
+```
+
+着重看一下`application.js`，阅读起来难度不大，代码245行，可以说很少了，挑挑拣拣说一下:
+
+koa用法大概像下面这样：
+
+<img src="./doc/koa-app.png">
+
+首先new一个koa实例，然后执行use方法和listen方法，简简单单，接下来就看一下use是干什么用的
+
+<img src="./doc/node-use.png">
+
+use的主要作用是将中间件`push`到`this.middleware`中，第一个`if`是检查是不是函数，第二个是检查并兼容[Generator函数](http://es6.ruanyifeng.com/#docs/generator)，一番检查之后就push进一个数组了。
+
+然后是走到了调用listen函数的地方：
+
+<img src="./doc/node-callback.png">
+
+koa使用了node的原生http包来创建http服务，listen函数主要是开启了`http`服务器，开始处理http请求，callback主要是用来生成`createServer`的回调，看代码是中间件`this.middleware`数组被封装成了一个名为 fn 的对象，然后通过将context传入这个对象来返回一个promise。
+
+这里面的问题就在于这个`compose`函数，它是一个封装好了的模块[`koa-composer`](https://github.com/koajs/compose)，大概看一下里面的源码：
+
+<img src="./doc/node-compose.png">
+
+一番安全检查之后，就是一个递归函数，捋半天可以理解出来思路，大概意思就是把第 i+1 个中间件作为next函数传给第 i 个中间件，所以就需要主动去调用next，不然后续的中间件就执行。这个地方还是要想半天的= =
+```
+let index = -1
+return dispatch(0)
+function dispatch (i) {
+	if (i <= index) return Promise.reject(new Error('next() called multiple times'))
+	index = i
+	let fn = middleware[i]
+	if (i === middleware.length) fn = next
+	if (!fn) return Promise.resolve()
+	try {
+		return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
+	} catch (err) {
+		return Promise.reject(err)
+	}
+}
+```
+koa就大概说到这里吧，说的有点长= =但是koa的源码真的很少，还有注释，嗨森，可阅读性比较好~
+
+### 关于数据库
