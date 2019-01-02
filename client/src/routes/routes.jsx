@@ -16,4 +16,9 @@ export default [
         exact: true,
         component: View.Login
     },
+    {
+        path: "/detail",
+        exact: true,
+        component: View.Detail
+    }
 ]

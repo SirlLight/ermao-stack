@@ -1,20 +1,14 @@
-import React, { Component } from "react"
-import { Layout, Menu, Icon } from "antd"
+import React from "react";
+import { Layout } from "antd";
 
-const { Header, Sider, Content } = Layout
+const { Content } = Layout;
 
-export default class Main extends Component {
-    constructor() {
-        super()
-    }
+const Main = (props) => (
+    <Layout>
+        <Content style={{ background: "#fff", padding: 20 }}>
+            { props.children ? props.children : null}
+        </Content>
+    </Layout>
+);
 
-    render() {
-        return (
-            <Layout>
-                <Content style={{ background: '#fff', padding: 20 }}>
-                    { this.props.children ? this.props.children : null}
-                </Content>
-            </Layout>
-        ) 
-    }
-}
+export default Main;

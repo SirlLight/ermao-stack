@@ -38,9 +38,7 @@ export default class LoginForm extends Component {
 
     validate = (obj) => {
         if (obj instanceof Array) {
-            obj.map(item => {
-                item = this.validate(item);
-            });
+            obj = obj.map(item => this.validate(item));
         } else {
             obj.error = "";
             obj.pattern.map((reg, index) => {
@@ -54,7 +52,8 @@ export default class LoginForm extends Component {
     };
 
     redraw = (obj, key) => {
-        let itemArr = this.state.formConfig;
+        const { formConfig } = this.state;
+        let itemArr = [...formConfig];
         if (obj instanceof Array) {
             itemArr = obj;
         } else {
@@ -67,8 +66,8 @@ export default class LoginForm extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let _this = this,
-            formData = _this.validate(_this.state.formConfig), 
+        const _this = this,
+            formData = _this.validate(_this.state.formConfig),
             errorArr = [];
         formData.map(item => {
             item.error && errorArr.push(item.placeholder);
@@ -88,27 +87,25 @@ export default class LoginForm extends Component {
     };
 
     fmtData = (data) => {
-        let result = {};
+        const result = {};
         data.map(item => {
             result[item.name] = item.value;
         });
         return result;
     };
 
-    getInput = ({...arg}) => {        
-        return (
-            <div>
-                <input 
-                    className="login-form-input" 
-                    data-key={arg.key} 
-                    name={arg.name} 
-                    type={arg.type} 
-                    placeholder={arg.placeholder} 
-                    onBlur={e => this.setItem(e, arg)}/>
-                {arg.error ? <span className="warn-text login-form-error">{arg.error}</span> : null}
-            </div>
-        );
-    };
+    getInput = ({ ...arg }) => (
+        <div>
+            <input
+                className="login-form-input"
+                data-key={arg.key}
+                name={arg.name}
+                type={arg.type}
+                placeholder={arg.placeholder}
+                onBlur={e => this.setItem(e, arg)} />
+            {arg.error ? <span className="warn-text login-form-error">{arg.error}</span> : null}
+        </div>
+    );
 
     render() {
         const { formConfig } = this.state;
@@ -117,18 +114,16 @@ export default class LoginForm extends Component {
             <form id="login-form" onSubmit={this.handleSubmit}>
                 <ul className="login-form-list">
                     {
-                        formConfig.map((item, index) => {
-                            return (
-                                <li key={index} className={`login-form-item ${item.name === "password" && "login-pwd-wrap"}`}>
-                                    {
-                                        this.getInput({...item, key: index})
-                                    }
-                                </li>
-                            )
-                        })
+                        formConfig.map(item => (
+                            <li key={item.name} className={`login-form-item ${item.name === "password" && "login-pwd-wrap"}`}>
+                                {
+                                    this.getInput({ ...item, key: item.name })
+                                }
+                            </li>
+                        ))
                     }
                     <li className="login-form-item form-border-none">
-                        <input type="checkbox"/>
+                        <input type="checkbox" />
                         <span className="remenber-pwd">记住密码</span>
                     </li>
                     <li className="login-form-item login-btn-wrap">
@@ -138,4 +133,4 @@ export default class LoginForm extends Component {
             </form>
         );
     }
-};
+}

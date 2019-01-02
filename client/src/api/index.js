@@ -1,16 +1,8 @@
 import { GET, POST } from "../common/http";
 
 export default {
-    register: params => {
-        return POST("/register", params);
-    },
-    validateUserName: params => {
-        return POST("/validateUserName", params);
-    },
-    login: params => {
-        return POST("/login", params);
-    },
-    getSession: params => {
-        return GET("/getSession", params);
-    }
-}
+    register: params => POST("/register", params),
+    validateUserName: params => POST("/validateUserName", params),
+    login: params => POST("/login", params),
+    getSession: params => GET("/getSession", params)
+};

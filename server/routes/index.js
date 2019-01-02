@@ -1,4 +1,3 @@
-"use strict";
 import path from "path";
 import Router from "koa-router";
 import api from "./api";
@@ -7,7 +6,7 @@ import mimes from "../util/mimes";
 const router = new Router();
 
 router.use("/api", api.routes(), api.allowedMethods());
-router.use("/", async (ctx, next) => {
+router.use("/", async (ctx) => {
     let extname = path.extname(ctx.path);
     extname = extname ? mimes[extname.slice(1)] : "";
 
@@ -16,7 +15,7 @@ router.use("/", async (ctx, next) => {
     }
 });
 
-router.get("*", async (ctx, next) => {    
+router.get("*", async (ctx) => {
     if (ctx.status === 404) {
         await ctx.render("index");
     }

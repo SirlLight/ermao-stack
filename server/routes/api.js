@@ -1,5 +1,3 @@
-"use strict";
-
 import Router from "koa-router";
 import baseCtrl from "../controller/baseCtrl";
 

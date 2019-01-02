@@ -2,9 +2,7 @@ import superagent from "superagent";
 
 const HOST = "/api";
 
-const setHeader = () => {
-    return {};
-}
+const setHeader = () => {};
 
 /**
  * GET请求封装
@@ -22,8 +20,8 @@ export const GET = (url, params, opt = {}) => {
     return superagent.get(reqUrl)
         .query(params)
         .set(opt.headers ? opt.headers : headers)
-        .then(rs => rs.body)
-}
+        .then(rs => rs.body);
+};
 
 /**
  * POST请求封装
@@ -43,16 +41,15 @@ export const POST = (url, params, opt = {}) => {
         .send(params)
         .set(opt.headers || headers)
         .type(opt.type !== undefined ? opt.type : "json")
-        .then(rs => rs.body)
-}
+        .then(rs => rs.body);
+};
 
 export const FETCHAll = apis => {
-    let api_arr = apis;
+    let apiArr = apis;
 
-    if(!Array.isArray(api_arr)) {
-        api_arr = [api_arr];
+    if (!Array.isArray(apiArr)) {
+        apiArr = [apiArr];
     }
 
-    return Promise.all(api_arr);
-}
-
+    return Promise.all(apiArr);
+};

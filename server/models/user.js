@@ -1,5 +1,5 @@
 export default function(sequelize, DataTypes) {
-    var User = sequelize.define("user", {
+    const User = sequelize.define("user", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -7,15 +7,15 @@ export default function(sequelize, DataTypes) {
             autoIncrement: true
         },
         username: {
-            type:  DataTypes.STRING(10),
+            type: DataTypes.STRING(10),
             allowNull: false
         },
         password: {
-            type:  DataTypes.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         },
         email: {
-            type:  DataTypes.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         }
     });

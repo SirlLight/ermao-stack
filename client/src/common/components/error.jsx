@@ -1,24 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
 import { Icon } from "antd";
 import errorImg from "../img/error.jpg";
 import "../style/error.less";
 
-export default class Error extends Component {
-    constructor (props) {
-        super(props);
-    }
+const Error = (props) => {
 
-    render() {
-        const text = this.props.text || "出错啦";
-        const className = this.props.className || {};
+    const { text, className } = props,
+        displayText = text || "出错啦";
 
-        return (
-            <div id="page-error-wrap" className={className}>
-                <img src={errorImg} className="error-img" />
+    return (
+        <div id="page-error-wrap" className={className}>
+            <div className="error-content-wrap">
+                <img src={errorImg} className="error-img" alt="error" />
                 <div className="text-wrap">
-                    <p><Icon type="meh-o" className="margin-r-5"/>{text}</p>
-                </div> 
+                    <p>
+                        <Icon type="meh-o" className="margin-r-5" />{displayText}
+                    </p>
+                </div>
             </div>
-        );
-    }
+        </div>
+    );
 };
+export default Error;

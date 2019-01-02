@@ -35,7 +35,7 @@ export default class HomeHeader extends Component {
                 </li>
                 <li className="header-item header-logo-wrap">
                     <Link to="/">
-                        <i className="home-header-logo"></i>
+                        <i className="home-header-logo" />
                     </Link>
                 </li>
                 {

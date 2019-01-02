@@ -34,7 +34,7 @@ export default class RegisterForm extends Component {
                     name: "email",
                     type: "text",
                     placeholder: "邮箱",
-                    pattern: [/\S+/, /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/],
+                    pattern: [/\S+/, /^([A-Za-z0-9_-]\.)+@([A-Za-z0-9_-]\.)+\.([A-Za-z]{2,4})$/],
                     tips: ["必填", "邮箱格式不正确"]
                 }
             ]
@@ -51,15 +51,10 @@ export default class RegisterForm extends Component {
 
     validate = (obj) => {
         const _this = this;
-        if (obj instanceof Array) {
-            obj.map(item => {
-                item = _this.validate(item);
-            });
-        } else {
+        if (!(obj instanceof Array)) {
             if (obj.pattern) {
-                let patternLen = obj.pattern.length;
                 obj.error = "";
-                for (let i = 0; i < patternLen; i++) {
+                for (const i in obj.pattern) {
                     if (!obj.pattern[i].test(obj.value || "")) {
                         obj.error = obj.tips[i];
                         break;
@@ -67,9 +62,9 @@ export default class RegisterForm extends Component {
                 }
 
                 if (obj.name === "username" && obj.value) {
-                    API.validateUserName({name: obj.value}).then(res => {
+                    API.validateUserName({ name: obj.value }).then(res => {
                         if (res && res.code !== 0) {
-                            let temp = _this.state.formConfig[0];
+                            const temp = _this.state.formConfig[0];
                             temp.error = res.msg;
                             _this.redraw(temp, 0);
                         }
@@ -80,12 +75,15 @@ export default class RegisterForm extends Component {
                     obj.error = "密码两次输入不一致";
                 }
             }
+        } else {
+            obj = obj.map(item => _this.validate(item));
         }
         return obj;
     };
 
     redraw = (obj, key) => {
-        let itemArr = this.state.formConfig;
+        const { formConfig } = this.state;
+        let itemArr = formConfig;
         if (obj instanceof Array) {
             itemArr = obj;
         } else {
@@ -98,16 +96,19 @@ export default class RegisterForm extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let _this = this,
-            formData = _this.validate(_this.state.formConfig), 
+        const _this = this,
+            formData = _this.validate(_this.state.formConfig),
             errorArr = [];
+
         formData.map(item => {
             item.error && errorArr.push(item.placeholder);
         });
+
         if (errorArr.length) {
             message.error(`${errorArr.join("、")}格式校验出错，请检查`);
             return false;
         }
+
         API.register(_this.fmtData(formData)).then(res => {
             if (res && res.code === 0) {
                 _this.props.setReg(true);
@@ -118,27 +119,25 @@ export default class RegisterForm extends Component {
     };
 
     fmtData = (data) => {
-        let result = {};
+        const result = {};
         data.map(item => {
             result[item.name] = item.value;
         });
         return result;
     };
 
-    getInput = ({...arg}) => {        
-        return (
-            <div>
-                <input 
-                    className="reg-form-input" 
-                    data-key={arg.key} 
-                    name={arg.name} 
-                    type={arg.type} 
-                    placeholder={arg.placeholder} 
-                    onBlur={e => this.setItem(e, arg)}/>
-                {arg.error ? <span className="warn-text reg-form-error">{arg.error}</span> : null}
-            </div>
-        );
-    };
+    getInput = ({ ...arg }) => (
+        <div>
+            <input
+                className="reg-form-input"
+                data-key={arg.key}
+                name={arg.name}
+                type={arg.type}
+                placeholder={arg.placeholder}
+                onBlur={e => this.setItem(e, arg)} />
+            {arg.error ? <span className="warn-text reg-form-error">{arg.error}</span> : null}
+        </div>
+    );
 
     render() {
         const { formConfig } = this.state;
@@ -147,15 +146,13 @@ export default class RegisterForm extends Component {
             <form id="reg-form" onSubmit={this.handleSubmit}>
                 <ul className="reg-form-list">
                     {
-                        formConfig.map((item, index) => {
-                            return (
-                                <li key={index} className="reg-form-item">
-                                    {
-                                        this.getInput({...item, key: index})
-                                    }
-                                </li>
-                            )
-                        })
+                        formConfig.map(item => (
+                            <li key={item.name} className="reg-form-item">
+                                {
+                                    this.getInput({ ...item, key: item.name })
+                                }
+                            </li>
+                        ))
                     }
                     <li className="reg-form-item form-item-top">
                         <button type="submit" className="form-btn">注册</button>
@@ -164,4 +161,4 @@ export default class RegisterForm extends Component {
             </form>
         );
     }
-};
+}

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
     BrowserRouter,
     Route,
@@ -8,23 +8,17 @@ import {
 
 import routes from "./routes";
 
-export default class RoutesComponent extends Component {
-    constructor(props) {
-        super(props);
-    }
+const RoutesComponent = () => (
+    <BrowserRouter>
+        <Switch>
+            {
+                routes.map(route => (
+                    <Route exact={route.exact} path={route.path} key={route.path} component={route.component} />
+                ))
+            }
+            <Redirect from="*" to="/" />
+        </Switch>
+    </BrowserRouter>
+);
 
-    render() {
-        return (
-            <BrowserRouter>
-                <Switch>
-                    {
-                        routes.map((route, k) => {
-                            return (<Route exact={route.exact} path={route.path} key={k} component={route.component}/>)
-                        })
-                    }
-                    <Redirect from="*" to="/" />
-                </Switch>
-            </BrowserRouter>
-        )
-    }
-}
+export default RoutesComponent;

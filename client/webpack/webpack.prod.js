@@ -122,7 +122,7 @@ module.exports = {
             minimize: true,
             debug: false
         }),
-        new LodashModuleReplacementPlugin
+        new LodashModuleReplacementPlugin()
     ],
     optimization: {
         // 将模块分离到单独的文件中
@@ -139,4 +139,4 @@ module.exports = {
         // 优化持久化缓存。将模块信息单独打包出来，使得变更某个模块时缓存不会失效
         runtimeChunk: true
     }
-}
+};

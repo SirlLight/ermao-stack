@@ -36,7 +36,7 @@ export default class Home extends Component {
                         <span className="first-title">ER</span>
                         <span className="second-title">MAO</span>
                     </p>
-                    <Link to="/">
+                    <Link to="/detail">
                         <button className="home-btn">时刻保持冷静</button>
                     </Link>
                 </div>
@@ -46,11 +46,11 @@ export default class Home extends Component {
                     <ul className="content-article-list">
                         {
                             Object.keys(this.article).map(index => {
-                                let item = this.article[index];
+                                const item = this.article[index];
                                 return (
                                     <Link to="/" className="content-article-item">
                                         <li key={index}>
-                                            <img className="content-article-img" src={item.img} />
+                                            <img className="content-article-img" src={item.img} alt={item.title} />
                                             <p className="content-article-title">{item.title}</p>
                                         </li>
                                     </Link>
@@ -58,7 +58,7 @@ export default class Home extends Component {
                             })
                         }
                     </ul>
-                    <p className="content-read-more">不喜欢吗？<a className="read-more">那就换!</a></p>
+                    <p className="content-read-more">不喜欢吗？<span className="read-more">那就换!</span></p>
                 </div>
                 <div className="home-footer">
                     ©2018 这里是一只火辣辣的二毛
@@ -66,4 +66,4 @@ export default class Home extends Component {
             </div>
         );
     }
-};
+}

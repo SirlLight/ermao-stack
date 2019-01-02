@@ -5,7 +5,7 @@ export function firstToUpper (str) {
     
     strArr.map(item => {
         if (/^\w+$/.test(item)) {
-            result += item.replace(/\b(\w)/g, function ($1) {return $1.toUpperCase()});
+            result += item.replace(/\b(\w)/g, ($1) => $1.toUpperCase());
         }
         result += " ";
     });

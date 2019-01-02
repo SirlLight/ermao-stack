@@ -30,9 +30,9 @@ export default class Login extends Component {
         return (
             <div id="ermao-login-wrap">
                 {
-                    this.state.isLogin ? <PageLoading text={"成功登录了哟，enjoy yourself~"}/> : null
+                    this.state.isLogin ? <PageLoading text="成功登录了哟，enjoy yourself~" /> : null
                 }
-                <HomeHeader history={this.props.history}/>
+                <HomeHeader history={this.props.history} />
                 <div className="login-banner-wrap">
                     <p className="banner-main-title">
                         <span className="first-title">ER</span>
@@ -40,7 +40,7 @@ export default class Login extends Component {
                     </p>
                     <p className="banner-sub-title">快来玩呀</p>
                 </div>
-                <LoginForm setLogin={this.setLogin}/>
+                <LoginForm setLogin={this.setLogin} />
                 <div className="login-bottom">
                     还没有账号？
                     <a className="login-rules" href="/reg">立即注册</a>
@@ -48,4 +48,4 @@ export default class Login extends Component {
             </div>
         );
     }
-};
+}

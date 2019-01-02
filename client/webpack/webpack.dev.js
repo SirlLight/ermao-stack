@@ -91,7 +91,7 @@ const config = {
             template: "../server/views/index.tpl.html",
             favicon: "../favicon.ico"
         }),
-        new LodashModuleReplacementPlugin
+        new LodashModuleReplacementPlugin()
     ],
     resolve: {
         extensions: [".js", ".jsx", ".json"]
@@ -100,7 +100,7 @@ const config = {
         content: [distDir],
         hot: true,
         port: "3030",
-        add: (app) => {            
+        add: (app) => {
             app.use(convert(proxy("/api", { target: "http://localhost:2333" })));
             app.use(convert(history({
                 disableDotRule: true,
