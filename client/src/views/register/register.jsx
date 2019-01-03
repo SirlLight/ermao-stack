@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import MainLayout from "../../layout/index";
 import PageLoading from "../../common/components/loading/page-loading";
-import HomeHeader from "../../layout/home-nav";
 import RegisterForm from "./form";
 import "./register.less";
 
@@ -28,24 +28,25 @@ export default class Register extends Component {
 
     render() {
         return (
-            <div id="ermao-register-wrap">
-                {
-                    this.state.regSuccess ? <PageLoading text="注册成功，快去登录叭~" /> : null
-                }
-                <HomeHeader history={this.props.history} />
-                <div className="register-banner-wrap">
-                    <p className="banner-main-title">
-                        <span className="first-title">ER</span>
-                        <span className="second-title">MAO</span>
-                    </p>
-                    <p className="banner-sub-title">快来玩呀</p>
+            <MainLayout history={this.props.history}>
+                <div id="ermao-register-wrap">
+                    {
+                        this.state.regSuccess ? <PageLoading text="注册成功，快去登录叭~" /> : null
+                    }
+                    <div className="register-banner-wrap">
+                        <p className="banner-main-title">
+                            <span className="first-title">ER</span>
+                            <span className="second-title">MAO</span>
+                        </p>
+                        <p className="banner-sub-title">快来玩呀</p>
+                    </div>
+                    <RegisterForm setReg={this.setReg} />
+                    {/* <div className="reg-bottom">
+                        点击 注册 按钮表示同意
+                        <a className="reg-rules" href="www.baidu.com">《用户注册规则》</a>
+                    </div> */}
                 </div>
-                <RegisterForm setReg={this.setReg} />
-                <div className="reg-bottom">
-                    点击 注册 按钮表示同意
-                    <a className="reg-rules" href="www.baidu.com">《用户注册规则》</a>
-                </div>
-            </div>
+            </MainLayout>
         );
     }
 }

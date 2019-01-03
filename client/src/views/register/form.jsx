@@ -157,6 +157,10 @@ export default class RegisterForm extends Component {
                     <li className="reg-form-item form-item-top">
                         <button type="submit" className="form-btn">注册</button>
                     </li>
+                    <li className="reg-bottom">
+                        点击 注册 按钮表示同意
+                        <a className="reg-rules" href="www.baidu.com">《用户注册规则》</a>
+                    </li>
                 </ul>
             </form>
         );

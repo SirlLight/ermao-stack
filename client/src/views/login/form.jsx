@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import cookie from "react-cookie";
 import { message } from "antd";
 import "./login.less";
@@ -128,6 +129,10 @@ export default class LoginForm extends Component {
                     </li>
                     <li className="login-form-item login-btn-wrap">
                         <button type="submit" className="form-btn">登录</button>
+                    </li>
+                    <li className="login-form-bottom">
+                        还没有账号？
+                        <Link className="login-rules" to="/reg">立即注册</Link>
                     </li>
                 </ul>
             </form>

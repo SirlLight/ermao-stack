@@ -1,0 +1,93 @@
+@import "../common/style/common.less";
+
+.main-layout {
+    padding: 0;
+    margin: 0;
+
+    .layout-header {
+        height: 45px;
+    }
+    
+    .layout-content {
+        background: #fff;
+    }
+    
+    .layout-footer {
+        text-align: center;
+        font-size: 12px;
+        color: #626262;
+    }
+}
+
+.home-header-wrap {
+    height: 45px;
+    line-height: 45px;
+    background: #fff;
+    border-bottom: 1px solid #eeeeee;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9;
+
+    .header-item {
+        display: inline-block;
+        padding: 0 20px;
+
+        &.header-logo-wrap {
+            position: absolute;
+            left: 50%;
+            margin-left: -36px;
+        }
+
+        &.header-item-left {
+            border-left: 1px solid #eee;
+        }
+
+        &.header-item-right {
+            border-right: 1px solid #eee;
+        }
+
+        .home-header-logo {
+            background: url(../common/img/logo.png) no-repeat center;
+            background-size: 100% 100%;
+            width: 32px;
+            height: 32px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+
+    .header-account {
+        position: relative;
+
+        &:hover {
+            border: 1px solid #eee;
+            border-bottom: none;
+
+            .account-list-wrap {
+                display: block;
+            }
+        }
+    }
+
+    .account-list-wrap {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        border: 1px solid #eee;
+        margin-top: -2px;
+        display: none;
+
+        .account-list-item {
+            line-height: 35px;
+            border-bottom: 1px dashed #eee;
+            cursor: pointer;
+
+            &:hover {
+                color: @pinkFont;
+            }
+        }
+    }
+}
