@@ -21,7 +21,7 @@ export default class HomeHeader extends Component {
     }
 
     logout = () => {
-        cookie.remove("username", {path: "/"});
+        cookie.remove("username", { path: "/" });
         this.setState({
             isLogin: false
         });

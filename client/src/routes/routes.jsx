@@ -21,4 +21,4 @@ export default [
         exact: true,
         component: View.Detail
     }
-]
+];

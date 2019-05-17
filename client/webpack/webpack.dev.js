@@ -1,9 +1,9 @@
-const path = require("path"),   // node的path  
-    HtmlWebpackPlugin = require("html-webpack-plugin"),    // html自动化编译
-    LodashModuleReplacementPlugin = require("lodash-webpack-plugin"),   // 按需打包lodash
-    history = require("connect-history-api-fallback"), // h5路由适配
-    proxy = require("http-proxy-middleware"),   // 请求转发
-    convert = require("koa-connect");
+const path = require("path");   // node的path
+const HtmlWebpackPlugin = require("html-webpack-plugin");    // html自动化编译
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");   // 按需打包lodash
+const history = require("connect-history-api-fallback"); // h5路由适配
+const proxy = require("http-proxy-middleware");   // 请求转发
+const convert = require("koa-connect");
 
 const distDir = path.resolve(__dirname, "../dist");    // 打包生成静态文件目录
 

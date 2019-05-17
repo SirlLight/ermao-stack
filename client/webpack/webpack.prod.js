@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 
@@ -11,7 +11,7 @@ const distDir = path.resolve(__dirname, "../dist");    // 打包生成静态文�
 module.exports = {
     mode: "production",
     entry: {
-        bundle: "./client/src",
+        index: path.resolve(__dirname, "../src/index.jsx"),
         vendor: [
             "react",
             "react-dom",
@@ -27,55 +27,45 @@ module.exports = {
         chunkFilename: "js/[name].chunk.[chunkhash:8].js",
         publicPath: "/"
     },
+    resolve: {
+        modules: [path.resolve(__dirname, "../../node_modules")],
+        extensions: [".jsx", ".js", ".json"],
+        alias: {
+            "@": path.resolve(__dirname, "../src")
+        } // 配置别名可以加快webpack查找模块的速度
+    },
     module: {
         rules: [
             {
                 test: /\.jsx?$/,
-                include: [
-                    path.resolve(__dirname, "../src")
-                ],
                 use: [
-                    "babel-loader"
-                ]
+                    "babel-loader",
+                    "eslint-loader"
+                ],
+                include: path.resolve(__dirname, "../src"),
+                exclude: /node_modules/
             },
             {
                 test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: [
-                        {
-                            loader: "css-loader",
-                            options: {
-                                sourceMap: true,
-                                importLoaders: 1
-                            }
-                        }, {
-                            loader: "postcss-loader"
-                        },
-                        "less-loader"
-                    ]
-                }),
+                loaders: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "postcss-loader",
+                    "less-loader"
+                ],
+                include: path.resolve(__dirname, "../src"),
                 exclude: /node_modules/
             },
             {
                 test: /\.css$/,
-                use: [
-                    "style-loader",
-                    {
-                        loader: "css-loader",
-                        options: {
-                            minimize: true,
-                            importLoaders: 1
-                        }
-                    },
-                    {
-                        loader: "postcss-loader"
-                    }
+                loaders: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader"
                 ],
                 include: /node_modules/
             },
             {
-                test: /\.(gif|jpg|png)\??.*$/,
+                test: /\.(png|jpg|jpeg|gif|svg)/,
                 loader: "url-loader",
                 options: {
                     limit: 8192,
@@ -83,24 +73,14 @@ module.exports = {
                 }
             },
             {
-                test: /\.(woff|svg|eot|ttf)\??.*$/,
+                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 loader: "url-loader",
                 options: {
                     limit: 8192,
                     name: "font/[name].[hash:6].[ext]"
                 }
-            },
-            {
-                test: /\.html$/,
-                loader: "html-loader",
-                options: {
-                    minimize: false
-                }
             }
         ]
-    },
-    resolve: {
-        extensions: [".web.js", ".js", ".jsx", ".json", ".less"]
     },
     plugins: [
         new CleanWebpackPlugin([
@@ -110,13 +90,13 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: "../../server/views/index.html",
             template: "./server/views/index.tpl.html",
-            favicon: "./favicon.ico"
+            favicon: "./favicon.ico",
+            chunks: ["index", "index"]
         }),
         new ProgressBarPlugin({ summary: false }), // build进度条
-        new ExtractTextPlugin({     // 提取样式代码
-            filename: "css/[name].[hash:8].css",
-            disable: false,
-            allChunks: true
+        new MiniCssExtractPlugin({
+            filename: "css/[name].[chunkhash:6].css",
+            chunkFilename: "css/[name].[chunkhash:6].css"
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true,
@@ -127,16 +107,15 @@ module.exports = {
     optimization: {
         // 将模块分离到单独的文件中
         splitChunks: {
-            // 将第三方库缓存在客户端
             cacheGroups: {
-                vendor: {
-                    chunks: "initial",    // "infinity" 等价于入口数量，即所有入口都引用的模块才会提取出来
-                    name: "vendor",
-                    enforce: true
-                },
+                commons: {
+                    chunks: "initial",
+                    minChunks: 2,
+                    maxInitialRequests: 5,
+                    minSize: 0,
+                    name: "common"
+                }
             }
-        },
-        // 优化持久化缓存。将模块信息单独打包出来，使得变更某个模块时缓存不会失效
-        runtimeChunk: true
+        }
     }
 };

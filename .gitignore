@@ -4,3 +4,5 @@ client/dist
 server/views/index.html
 server/config/db.json
 bug-list.md
+/*.log
+/*.lock

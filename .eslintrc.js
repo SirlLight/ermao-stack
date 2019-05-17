@@ -22,6 +22,13 @@ module.exports = {
         "ecmaVersion": 2018,    // ECMAScript版本，这里为ES7
         "sourceType": "module"  // 默认script，如果代码是ECMAScript模块，设置为module
     },
+    "settings": {
+        "import/resolver": {
+            "webpack": {
+                "config": "client/webpack/webpack.prod.js"
+            }
+        }
+    },
     "plugins": [
         "react"
     ],

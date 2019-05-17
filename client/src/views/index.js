@@ -1,4 +1,13 @@
-export { default as Home } from "./home/home";
-export { default as Register } from "./register/register";
-export { default as Login } from "./login/login";
-export { default as Detail } from "./detail/article";
+import AsyncComponent from "@/common/tools/AsyncComponent";
+
+const Home = AsyncComponent(() => import(/* webpackChunkName: "home" */"./home/home"));
+const Register = AsyncComponent(() => import(/* webpackChunkName: "register" */"./register/register"));
+const Login = AsyncComponent(() => import(/* webpackChunkName: "login" */"./login/login"));
+const Detail = AsyncComponent(() => import(/* webpackChunkName: "detail" */"./detail/article"));
+
+export default {
+    Home,
+    Register,
+    Login,
+    Detail
+};
